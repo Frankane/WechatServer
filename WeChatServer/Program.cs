@@ -16,6 +16,7 @@ namespace WeChatServer {
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls("http://*:5050")
                 .UseStartup<Startup>();
     }
 }

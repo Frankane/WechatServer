@@ -37,16 +37,6 @@ namespace WeChatServer.Controllers {
 
         #endregion
 
-        //[HttpGet]
-        //[Route("home")]
-        //public ActionResult Index() {
-        //    dynamic model = new { Name = "Wrold!" };
-        //    var response = new HttpResponseMessage(HttpStatusCode.OK);
-        //    string viewPath = @"~/Pages/Index.cshtml";
-        //    var template = File.ReadAllText(viewPath);
-        //    string parsedView = Razor.Parse(template, model);
-        //}
-
         #region 随机获取三本书
         [Route("getthreebooks")]
         public ActionResult<IEnumerable<Book>> GetThreeBooks() {
@@ -111,8 +101,9 @@ namespace WeChatServer.Controllers {
         /// <param name="owner"></param>
         /// <param name="introduce"></param>
         [Route("addbook")]
-        public ActionResult AddBook(string name, string author, string owner, string introduce) {
+        public ActionResult AddBook([FromBody] string[] book) {
             IFormFile file = Request.Form.Files["bookcover"];
+            
             // 文件大小
             //long size = 0;
             // 原文件名（包括路径）
@@ -134,16 +125,16 @@ namespace WeChatServer.Controllers {
             }
 
             //将书籍封面地址和信息保存到数据库
-            Book book = new Book {
+            Book newBook = new Book {
                 BookID = Guid.NewGuid().ToString("N"),
-                Name = name,
-                Author = author,
-                Introduce = introduce,
-                Owner = owner,
+                Name = book[0],
+                Author = book[1],
+                OwnerID = book[2],
+                Introduce = book[3],
                 UploadTime = DateTime.Now,
                 BookCover = filename
             };
-            db.Insertable(book).ExecuteCommand();
+            db.Insertable(newBook).ExecuteCommand();
             return Ok("添加成功");
         }
 
