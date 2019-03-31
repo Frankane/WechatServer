@@ -13,13 +13,13 @@ using SqlSugar;
 namespace WeChatServer.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase {
+    public class BookController : ControllerBase {
 
         #region 变量和配置
 
         SqlSugarClient db = SqlSugarHelper.ConnectMariaDB();
         private IHostingEnvironment hostingEnvironment;
-        public BooksController(IHostingEnvironment env) {
+        public BookController(IHostingEnvironment env) {
             hostingEnvironment = env;
         }
 
@@ -83,10 +83,10 @@ namespace WeChatServer.Controllers {
         //[Route("api/[controller]/getbook")]
         //[HttpGet("{bookid}")]
         [Route("getabook")]
-        public ActionResult<BookInfo> GetBook(string bookid) {
+        public ActionResult<Essay> GetBook(string bookid) {
             Console.WriteLine("执行查看操作-------------");
 
-            return new BookInfo();
+            return new Essay();
         }
 
         #endregion

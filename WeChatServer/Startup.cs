@@ -43,6 +43,8 @@ namespace WeChatServer {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            var idProvider = new WeChatUserIdProvider();
+            GlobalHost.DependencyResolver.Register (typeof(IUserIdProvider), () => idProvider);
             app.UseSignalR(routes => {
                 routes.MapHub<ChatHub>("/chathub");
                 routes.MapHub<WeChatHub>("/wechathub");

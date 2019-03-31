@@ -19,7 +19,7 @@ namespace WeChatServer.Controllers {
 
         SqlSugarClient db = SqlSugarHelper.ConnectMariaDB();
 
-        #region 小程序用户登录获取openID
+        #region 小程序用户登录获取openID 参数:code
 
         /// <summary>
         /// 小程序用户登录获取openID
@@ -65,15 +65,34 @@ namespace WeChatServer.Controllers {
         }
 
         #endregion
-        
+
+        #region 添加用户 参数:openid,userName,userAvatar
+
+        [Route("adduser")]
+        public void AddUser(string openid,string userName,string userAvatar) {
+            User user = new User {
+                UserName = userName,
+                UserID = openid,
+                UserAvatar = userAvatar
+            };
+            db.Insertable<User>(user);
+        }
+
+        #endregion
+
+        #region 获取个人全部图书 参数:ownerid(userid/openid)
+
         /// <summary>
         /// 根据ownerID获取用户所有图书
         /// </summary>
-        /// <param name="ownerid"></param>
+        /// <param name="ownerid">用户ID(openid)</param>
         /// <returns></returns>
         [Route("getmybooks")]
         public ActionResult<IEnumerable<Book>> GetMyBooks(string ownerid) {
             return db.Queryable<Book>().Where(it => it.OwnerID == ownerid).ToList();
         }
+
+        #endregion
+
     }
 }

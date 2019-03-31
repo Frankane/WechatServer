@@ -3,6 +3,7 @@ using System.Security.Claims;
 using WeChatServer.Models;
 
 namespace WeChatServer {
+    [Authorize]
     public class ChatHub :Hub{
         #region 广播消息
 
@@ -23,6 +24,7 @@ namespace WeChatServer {
     /// <summary>
     /// 用于微信的ChatHub
     /// </summary>
+    [Authorize]
     public class WeChatHub : Hub {
         /// <summary>
         /// 私人消息
@@ -35,8 +37,10 @@ namespace WeChatServer {
         }
     }
 
+    
+    public class WeChatUserIdProvider : IUserIdProvider {
+        public string userID(IRequest request);
 
-    public class CustomUserIdProvider : IUserIdProvider {
         public virtual string GetUserId(HubConnectionContext connection) {
             return connection.User?.FindFirst(ClaimTypes.Email)?.Value;
         }

@@ -7,7 +7,7 @@ namespace WeChatServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuotesController : ControllerBase
+    public class QuoteController : ControllerBase
     {
         SqlSugarClient db = SqlSugarHelper.ConnectMariaDB();
 
@@ -19,8 +19,8 @@ namespace WeChatServer.Controllers
         /// <returns></returns>
         [Route("addquote")]
         public ActionResult AddQuote(string quote,string author) {
-            Quotes newQuote = new Quotes { quote = quote, author = author };
-            db.Insertable<Quotes>(newQuote);
+            Quote newQuote = new Quote { quote = quote, author = author };
+            db.Insertable<Quote>(newQuote);
             return Ok("添加成功");
         }
 
@@ -29,8 +29,8 @@ namespace WeChatServer.Controllers
         /// </summary>
         /// <returns></returns>
         [Route("getquote")]
-        public ActionResult<IEnumerable<Quotes>> GetQuote() {
-            return db.Queryable<Quotes>().OrderBy("rand() limit 1").ToList();
+        public ActionResult<IEnumerable<Quote>> GetQuote() {
+            return db.Queryable<Quote>().OrderBy("rand() limit 1").ToList();
         }
     }
 }

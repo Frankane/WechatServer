@@ -8,8 +8,8 @@ namespace WeChatServer.Models {
     ///用户类，用于用户间的聊天
     /// </summary>
     public class User {
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Avatar { get; set; }
+        public string UserID { get; set; }
+        public string UserName { get; set; }
+        public string UserAvatar { get; set; }
     }
 }
