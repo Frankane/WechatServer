@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using WeChatServer.Models;
 
 namespace WeChatServer.Controllers {
@@ -19,7 +14,7 @@ namespace WeChatServer.Controllers {
 
         SqlSugarClient db = SqlSugarHelper.ConnectMariaDB();
 
-        #region 小程序用户登录获取openID 参数:code
+        #region 小程序用户登录获取openID
 
         /// <summary>
         /// 小程序用户登录获取openID
@@ -61,25 +56,31 @@ namespace WeChatServer.Controllers {
             finally {
                 stream.Close();
             }
+            //string[] st = result.Split('\"');
+            //AddOrUpdate(st[7]);//将openid保存到User表
             return result;
         }
 
         #endregion
 
-        #region 添加用户 参数:openid,userName,userAvatar
+        #region 添加或者更新--[待优化]
 
-        [Route("adduser")]
-        public void AddUser(string openid,string userName,string userAvatar) {
-            User user = new User {
-                UserName = userName,
-                UserID = openid,
-                UserAvatar = userAvatar
-            };
-            db.Insertable<User>(user);
+        [Route("addorupdate")]
+        public void AddOrUpdate(string openid,string connectionid,int online) {
+            User user = new User { UserID = openid, ConnectionID=connectionid ,Online=online};
+            
+            try {
+                if (db.Queryable<User>().InSingle(openid).UserID == openid) {
+                    db.Updateable(user).ExecuteCommand();
+                }
+            }
+            catch (System.Exception) {
+                db.Insertable(user).ExecuteCommand();
+            }
         }
 
         #endregion
-
+        
         #region 获取个人全部图书 参数:ownerid(userid/openid)
 
         /// <summary>
@@ -94,5 +95,33 @@ namespace WeChatServer.Controllers {
 
         #endregion
 
+        #region 获取联系人
+
+        [Route("getcontacts")]
+        public ActionResult<IEnumerable<Contact>> GetContacts(string userid) {
+            try {
+                return db.Queryable<Contact>().Where(user => user.UserID == userid).ToList();
+            } catch {}
+            return null;
+        }
+
+        #endregion
+
+        #region 添加联系人
+
+        [Route("addcontact"),HttpPost]
+        public void AddContact() {
+            Contact contact = new Contact {
+                ID = Guid.NewGuid().ToString("N"),
+                UserID = Request.Form["userid"],
+                ContactID = Request.Form["contactid"],
+                ContactAvatar = Request.Form["contactAvatar"],
+                ContactName = Request.Form["contactName"],
+                LastMsg = Request.Form["lastMsg"]
+            };
+            db.Insertable(contact);
+        }
+
+        #endregion
     }
 }

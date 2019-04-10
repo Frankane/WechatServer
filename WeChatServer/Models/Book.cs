@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WeChatServer.Models {
     /// <summary>
@@ -37,5 +38,12 @@ namespace WeChatServer.Models {
                 return obj.ToString().GetHashCode();
             }
         }
+    }
+
+    public class NewBook {                
+       public string ownerid { get; set; }
+       public string bookName { get; set; }
+       public string bookAuthor { get; set; }
+       public string bookIntro { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace WeChatServer.Models {
     /// </summary>
     public class User {
         public string UserID { get; set; }
-        public string UserName { get; set; }
-        public string UserAvatar { get; set; }
+        public string ConnectionID { get; set; }
+        public int Online { get; set; }
     }
 }

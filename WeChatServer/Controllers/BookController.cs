@@ -100,10 +100,10 @@ namespace WeChatServer.Controllers {
         /// <param name="author"></param>
         /// <param name="owner"></param>
         /// <param name="introduce"></param>
-        [Route("addbook")]
-        public ActionResult AddBook([FromBody] string[] book) {
-            IFormFile file = Request.Form.Files["bookcover"];
+        [HttpPost, Route("addbook")]
+        public ActionResult AddBook() {
             
+            IFormFile file = Request.Form.Files["bookcover"];
             // 文件大小
             //long size = 0;
             // 原文件名（包括路径）
@@ -113,7 +113,7 @@ namespace WeChatServer.Controllers {
             // 新文件名
             string shortfilename = $"{Guid.NewGuid().ToString("N")}{extName}";
             // 新文件名（包括路径）
-            filename = hostingEnvironment.WebRootPath + @"\Images\BookCovers\" + shortfilename;
+            filename = hostingEnvironment.WebRootPath + @"/Images/BookCovers/" + shortfilename;
             // 设置文件大小
             //size += file.Length;
             // 创建新文件
@@ -123,19 +123,49 @@ namespace WeChatServer.Controllers {
                 // 清空缓冲区数据
                 fs.Flush();
             }
-
+            
             //将书籍封面地址和信息保存到数据库
-            Book newBook = new Book {
+            Book book = new Book {
                 BookID = Guid.NewGuid().ToString("N"),
-                Name = book[0],
-                Author = book[1],
-                OwnerID = book[2],
-                Introduce = book[3],
+                Name = Request.Form["bookName"],
+                Author = Request.Form["bookAuthor"],
+                OwnerID = Request.Form["ownerid"],
+                Introduce = Request.Form["bookIntro"],
                 UploadTime = DateTime.Now,
-                BookCover = filename
+                BookCover = "filename"
             };
-            db.Insertable(newBook).ExecuteCommand();
+            db.Insertable(book).ExecuteCommand();
             return Ok("添加成功");
+        }
+
+        #endregion
+
+        #region 添加文章
+
+        [Route("addessay")]
+        public void addEssay(string title,string content,string userid,string avatar,string nickname) {
+            Essay newEssay = new Essay {
+                EssayID = Guid.NewGuid().ToString("N"),
+                Title = title,
+                UserID = userid,
+                AvatarUrl = avatar,
+                Content = content,
+                UserNickName = nickname,
+                Time = DateTime.Now
+            };
+            db.Insertable(newEssay).ExecuteCommand();
+        }
+
+        #endregion
+
+        #region 获取文章
+
+        [Route("getessay")]
+        public ActionResult<IEnumerable<Essay>> getEssays(string essayid="") {
+            if (essayid!="") {
+                return new List<Essay> { db.Queryable<Essay>().InSingle(essayid) };
+            }
+            return db.Queryable<Essay>().ToList();
         }
 
         #endregion
