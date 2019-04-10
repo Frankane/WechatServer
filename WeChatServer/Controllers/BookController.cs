@@ -132,7 +132,7 @@ namespace WeChatServer.Controllers {
                 OwnerID = Request.Form["ownerid"],
                 Introduce = Request.Form["bookIntro"],
                 UploadTime = DateTime.Now,
-                BookCover = "filename"
+                BookCover = filename
             };
             db.Insertable(book).ExecuteCommand();
             return Ok("添加成功");
