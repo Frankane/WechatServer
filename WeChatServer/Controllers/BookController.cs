@@ -123,7 +123,7 @@ namespace WeChatServer.Controllers {
                 // 清空缓冲区数据
                 fs.Flush();
             }
-            
+            filename = @"https://www.sharemybook.store/Images/BookCovers/" + shortfilename;
             //将书籍封面地址和信息保存到数据库
             Book book = new Book {
                 BookID = Guid.NewGuid().ToString("N"),
