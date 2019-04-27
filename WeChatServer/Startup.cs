@@ -22,7 +22,7 @@ namespace WeChatServer {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddSingleton<IUserIdProvider, WeChatUserIdProvider>();
+            //services.AddSingleton<IUserIdProvider, WeChatUserIdProvider>();
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -43,7 +43,7 @@ namespace WeChatServer {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            var idProvider = new WeChatUserIdProvider();
+            //var idProvider = new WeChatUserIdProvider();
             app.UseSignalR(routes => {
                 routes.MapHub<ChatHub>("/chathub");
                 routes.MapHub<WeChatHub>("/wechathub");

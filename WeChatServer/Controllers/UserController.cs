@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using WeChatServer.Models;
+using System.Linq;
 
 namespace WeChatServer.Controllers {
     [Route("api/[controller]")]
@@ -63,12 +64,12 @@ namespace WeChatServer.Controllers {
 
         #endregion
 
-        #region 添加或者更新--[待优化]
+        #region 添加或者更新用户在线状态--[待优化]
 
         [Route("addorupdate")]
-        public void AddOrUpdate(string openid,string connectionid,int online) {
-            User user = new User { UserID = openid, ConnectionID=connectionid ,Online=online};
-            
+        public void AddOrUpdate(string openid, string connectionid, int online) {
+            User user = new User { UserID = openid, ConnectionID = connectionid, Online = online };
+
             try {
                 if (db.Queryable<User>().InSingle(openid).UserID == openid) {
                     db.Updateable(user).ExecuteCommand();
@@ -80,7 +81,7 @@ namespace WeChatServer.Controllers {
         }
 
         #endregion
-        
+
         #region 获取个人全部图书 参数:ownerid(userid/openid)
 
         /// <summary>
@@ -95,21 +96,74 @@ namespace WeChatServer.Controllers {
 
         #endregion
 
-        #region 获取联系人
+        #region 获取联系人 //可能没用！！！
 
         [Route("getcontacts")]
         public ActionResult<IEnumerable<Contact>> GetContacts(string userid) {
             try {
                 return db.Queryable<Contact>().Where(user => user.UserID == userid).ToList();
-            } catch {}
+            }
+            catch { }
             return null;
+        }
+
+        #endregion 
+
+        #region 获取未读消息
+
+        // 获取用户未读消息
+        [Route("getmessages")]
+        public IEnumerable<IGrouping<string,Message>> GetMessages(string userid) {
+            try {
+
+                List<Message> messageList = db.Queryable<Message>().Where(user => user.ToID == userid).ToList();
+                messageList.Add(db.Queryable<Message>().InSingle("1"));
+                db.Deleteable<Message>().Where(user => user.ToID == userid).ExecuteCommand();
+                IEnumerable<IGrouping<string, Message>> group = 
+                    from message in messageList group message by message.FromID into g select g;
+                return group;
+                //foreach (var one in group) {
+                //    if (db.Queryable<Contact>().Where(user=>user.ContactID==one.Key)!=null) {
+
+                //    }
+                //    foreach (var o in one) {
+                //        string i = o.ID;
+                //    }
+                //}
+            }
+            catch {
+                List<Message> messageList=null;
+                messageList.Add(db.Queryable<Message>().InSingle("1"));
+                IEnumerable<IGrouping<string, Message>> group =
+                    from message in messageList group message by message.FromID into g select g;
+                return group;
+            }
         }
 
         #endregion
 
+        #region 获取用户消息-头像、昵称
+
+        [Route("getuserinfo")]
+        public ActionResult<Book> getUserInfo(string userid) {
+            try {
+                return db.Queryable<Book>().First(user => user.OwnerID == userid);
+            }
+            catch  { return null; }
+
+        }
+
+        #endregion
+        
+
+        public void newContact(string userid, Message msg) {
+            Dictionary<string, Message> contact = new Dictionary<string, Message>();
+            contact.Add(userid, msg);
+        }
+        
         #region 添加联系人
 
-        [Route("addcontact"),HttpPost]
+        [Route("addcontact"), HttpPost]
         public void AddContact() {
             Contact contact = new Contact {
                 ID = Guid.NewGuid().ToString("N"),

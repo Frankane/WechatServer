@@ -130,6 +130,8 @@ namespace WeChatServer.Controllers {
                 Name = Request.Form["bookName"],
                 Author = Request.Form["bookAuthor"],
                 OwnerID = Request.Form["ownerid"],
+                OwnerAvatar = Request.Form["ownerAvatar"],
+                OwnerNickName = Request.Form["ownerNickName"],
                 Introduce = Request.Form["bookIntro"],
                 UploadTime = DateTime.Now,
                 BookCover = filename

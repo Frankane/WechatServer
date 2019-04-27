@@ -9,7 +9,7 @@ namespace WeChatServer {
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                //.UseUrls("http://*:5000")
+                //.UseUrls("http://*:5100")
                 //.UseSetting("https_port", "443")
                 .UseStartup<Startup>();
     }

@@ -11,6 +11,8 @@ namespace WeChatServer.Models {
         public string Name { get; set; }//书名
         public string Author { get; set; }//作者
         public string OwnerID { get; set; }//拥有者ID
+        public string OwnerAvatar { get; set; }
+        public string OwnerNickName { get; set; }
         public string Introduce { get; set; }//书籍简介
         public DateTime UploadTime { get; set; }//上传时间
         public string BookCover { get; set; }//封面存储路径
