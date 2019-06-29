@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <Compile Remove="wwwroot\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <Content Remove="Views\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <Content Remove="wwwroot\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <EmbeddedResource Remove="Views\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <EmbeddedResource Remove="wwwroot\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <None Remove="Views\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+    <None Remove="wwwroot\深度调查 _ 为什么我们不能访问谷歌？%2528长文慎入%2529 – More Less – Medium_files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\favicon.ico" />
   </ItemGroup>
 
@@ -17,6 +28,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Language" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.5.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="sqlSugarCore" Version="4.9.9.5" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
